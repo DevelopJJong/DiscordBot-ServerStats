@@ -49,7 +49,7 @@ public class BotServices {
         TimerTask ttask = new TimerTask() {
             @Override
             public void run() {
-                log.info("1분 타이머 실행");
+                log.info("15분 타이머 실행");
                 updateVoiceChannel(channelName, category);
             }
         };
