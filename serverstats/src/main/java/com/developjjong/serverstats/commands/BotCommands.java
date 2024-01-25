@@ -22,8 +22,7 @@ public class BotCommands extends ListenerAdapter {
             event.reply("서버 설정이 완료되었습니다.").queue();
         }else if(event.getName().equals("해제")){
             botServices.deleteVoiceChannels(event.getGuild());
-            botServices.deleteCategory(event.getGuild());
-            event.reply("삭제가 완료 되었습니다.").queue();
+            event.reply("서버 설정이 해제되었습니다.").queue();
         }
     }
 }

@@ -7,10 +7,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.sql.Time;
+import java.util.*;
 
 @Slf4j
 public class BotServices {
@@ -105,22 +103,34 @@ public class BotServices {
         return categories.isEmpty() ? guild.createCategory(categoryName).complete() : categories.get(0);
     }
 
-    public void deleteVoiceChannels(Guild guild) {
+    public String deleteVoiceChannels(Guild guild) {
 
-            for (VoiceChannel voiceChannel : guild.getVoiceChannels()) {
+        Category category = getOrCreateCategory(guild, emoji0 + "SERVERSTATS" + emoji0);
+
+        for (VoiceChannel voiceChannel : category.getVoiceChannels()) {
+            if (voiceChannel != null) {
                 try {
+                    Thread.sleep(1000); // 적절한 대기 시간을 설정
                     voiceChannel.delete().queue();
-                    Thread.sleep(1000);
+                    log.info("음성 채널 삭제 성공: " + voiceChannel.getName());
                 } catch (Exception e) {
-                    log.error("VoiceChannel 삭제 중 오류 발생:", e);
+                    log.error("음성 채널 삭제 중 오류 발생:", e);
                 }
             }
-        log.info("게시글 삭제");
-    }
-    public void deleteCategory(Guild guild) {
-        Category category = getOrCreateCategory(guild, emoji0 + "SERVERSTATS" + emoji0);
-        category.delete().queue();
-        log.info("카테고리 삭제");
+            else {
+                return "음성 채널을 찾을 수 없습니다";
+            }
+            log.info("게시글 삭제");
+        }
+        deleteCategory(guild);
+        return "모든 설정을 삭제했습니다.";
     }
 
-}
+        public void deleteCategory (Guild guild){
+            Category category = getOrCreateCategory(guild, emoji0 + "SERVERSTATS" + emoji0);
+            if(category != null){
+                category.delete().queue();
+            }
+            log.info("카테고리 삭제");
+        }
+    }
